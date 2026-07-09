@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { fiscalizadores } from './data/fiscalizadores';
+import { fiscalizadores } from './data/fiscalizadores.js';
 import Certificado from './components/Certificado.jsx';
 
 function App() {
