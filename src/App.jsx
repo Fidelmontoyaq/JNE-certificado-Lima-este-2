@@ -37,7 +37,7 @@ function App() {
           <img src="/img/logo.png" alt="Logo JNE" style={{ height: '150px', margin: '0 auto 16px', display: 'block', objectFit: 'contain' }} />
           
           <h1 style={{ fontSize: '26px', fontWeight: 'bold', color: '#b01e23', lineHeight: '1.2', margin: '0' }}>Consulta de Constancia</h1>
-          <p style={{ color: '#4a5568', fontWeight: 'bold', fontSize: '18px', marginTop: '8px', marginBottom: '32px' }}>Elecciones Generales 2026 - Primera vuelta</p>
+          <p style={{ color: '#4a5568', fontWeight: 'bold', fontSize: '18px', marginTop: '8px', marginBottom: '32px' }}>Elecciones Generales 2026 - Segunda vuelta</p>
 
           {/* Input DNI */}
           <div style={{ marginBottom: '24px' }}>
@@ -64,7 +64,7 @@ function App() {
 
           <div style={{ borderTop: '1px solid #edf2f7', width: '100%', margin: '32px 0' }}></div>
           <p style={{ color: '#6b7280', fontStyle: 'italic', fontSize: '14px', lineHeight: '1.5', padding: '0 16px', fontWeight: '500' }}>
-            "Gracias por asumir el reto con responsabilidad como fiscalizadores de local de votación de estas elecciones electorales 2026"
+            "Gracias por asumir el reto como fiscalizadores de local de votación de estas elecciones electorales 2026"
           </p>
         </div>
       </div>
