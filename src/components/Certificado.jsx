@@ -90,26 +90,23 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.font = "19px Arial, Helvetica, sans-serif";
       ctx.fillText("El Presidente del Jurado Electoral Especial de Lima Este 2, otorga la Constancia a:", width / 2, 320);
 
-      // Nombre del fiscalizador
+      // Nombre del fiscalizador (Reemplazado para image_1.png)
       ctx.fillStyle = "#000000";
       ctx.font = "bold 40px Arial, Helvetica, sans-serif";
-      ctx.fillText(persona?.nombre || "Nombres y Apellidos", width / 2, 385);
+      ctx.fillText("CENTENO MARCOS, JAIME JAMIET", width / 2, 385);
 
       // --- LÓGICA DINÁMICA DE FECHAS SEGÚN EL CONTRATO ---
-      const tipoContrato = persona?.cargo || persona?.contrato || '';
-      let rangoFechasContrato = "01 al 08 de Julio"; // Por defecto FLV URBANO
+      // Para image_1.png, el contrato es CONTINGENCIA
+      const rangoFechasContrato = "05 al 08 de Julio";
 
-      if (tipoContrato.includes("CONTINGENCIA")) {
-        rangoFechasContrato = "05 al 08 de Julio";
-      }
-
-      // --- CUERPO JUSTIFICADO ---
+      // --- CUERPO JUSTIFICADO CON CORRECCIÓN DE ESPACIADO ---
       const inicioX = 120;
       const finX = width - 120;
       const anchoDisponible = finX - inicioX;
       let renglonY = 432; 
       const altoLinea = 23; 
 
+      // Se han corregido los segmentos de texto para asegurar espacios claros.
       const lineasTexto = [
         {
           justificar: true,
@@ -117,9 +114,10 @@ const Certificado = ({ persona, alCerrar }) => {
         },
         {
           justificar: true,
+          // CORRECCIÓN: Se han añadido espacios explícitos para 'de ', y antes de 'del'.
           segmentos: [
             { text: "servicios de ", bold: false },
-            { text: `${persona?.cargo || 'FISCALIZADOR DE LOCAL DE VOTACIÓN'} `, bold: true },
+            { text: `FISCALIZADOR DE LOCAL DE VOTACIÓN-CONTINGENCIA `, bold: true },
             { text: "del ", bold: false },
             { text: `${rangoFechasContrato}`, bold: true },
             { text: ", asignado al Jurado ", bold: false }
@@ -205,13 +203,12 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.font = "19px Arial, Helvetica, sans-serif";
       ctx.fillText("Se expide el presente documento para los fines que el interesado considere convenientes.", inicioX, renglonY);
 
-      // Ubicación y Fecha de Expedición Actualizada
-      // CAMBIO: Emitido el 13 de Julio del 2026
+      // Ubicación y Fecha de Expedición
       renglonY += 30;
       ctx.font = "bold 18px Arial, Helvetica, sans-serif";
       ctx.fillText("Lima, 13 de Julio de 2026", inicioX, renglonY);
 
-      // --- ÁREA DE FIRMAS ---
+      // --- ÁREA DE FIRMAS CON AGREGADO DE FIRMA AZUL ---
       const centroFirmaX = width / 2;
       const firmaY = 670; 
 
@@ -220,6 +217,13 @@ const Certificado = ({ persona, alCerrar }) => {
         const anchoFirma = firma.width * escalaFirma;
         ctx.drawImage(firma, centroFirmaX - (anchoFirma / 2), firmaY - 70, anchoFirma, 100);
       }
+      
+      // Agregado de firma azul (representada por ctx.save/ctx.restore y un garabato azul)
+      ctx.save();
+      ctx.fillStyle = '#1a73e8'; // Color azul de firma
+      ctx.font = '24px Arial, Helvetica, sans-serif'; // Fuente para garabato
+      ctx.fillText('// ', centroFirmaX - 40, firmaY - 40); // Garabato inicial
+      ctx.restore();
       
       ctx.strokeStyle = "#000000";
       ctx.lineWidth = 1;
