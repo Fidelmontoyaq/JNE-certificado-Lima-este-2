@@ -5,17 +5,46 @@ import Certificado from './components/Certificado.jsx';
 function App() {
   const [dni, setDni] = useState('');
   const [personaEncontrada, setPersonaEncontrada] = useState(null);
+  const [datosCertificado, setDatosCertificado] = useState(null);
   const [error, setError] = useState('');
 
   const handleBuscar = () => {
     if (dni.length === 8) {
       const resultado = fiscalizadores.find(p => p.dni === dni);
       if (resultado) {
+        // 1. Determinar el rango de fechas según el tipo de contrato/cargo
+        let fechaInicio = '';
+        let fechaFin = '8 de julio del 2026'; // Común para ambos
+
+        // Suponiendo que el tipo de contrato viene en una propiedad como 'cargo' o 'contrato'
+        // Ajusta 'resultado.cargo' si en tu JSON se llama de otra forma (ej. resultado.tipo_contrato)
+        const tipoContrato = resultado.cargo || resultado.contrato || '';
+
+        if (tipoContrato.includes("URBANO")) {
+          fechaInicio = '01 de julio';
+        } else if (tipoContrato.includes("CONTINGENCIA")) {
+          fechaInicio = '05 de julio';
+        } else {
+          // Por si acaso hay otros casos base
+          fechaInicio = '01 de julio';
+        }
+
+        // 2. Agrupar toda la data calculada para el certificado
+        setDatosCertificado({
+          ...resultado,
+          fechaInicio,
+          fechaFin,
+          fechaElecciones: '7 de junio del 2026',
+          procesoElectoral: 'Segunda vuelta',
+          fechaExpedicion: '13 de Julio del 2026'
+        });
+
         setPersonaEncontrada(resultado);
         setError('');
       } else {
         setError('DNI no encontrado');
         setPersonaEncontrada(null);
+        setDatosCertificado(null);
       }
     } else {
       setError('El DNI debe tener 8 dígitos');
@@ -37,7 +66,8 @@ function App() {
           <img src="/img/logo.png" alt="Logo JNE" style={{ height: '150px', margin: '0 auto 16px', display: 'block', objectFit: 'contain' }} />
           
           <h1 style={{ fontSize: '26px', fontWeight: 'bold', color: '#b01e23', lineHeight: '1.2', margin: '0' }}>Consulta de Constancia</h1>
-          <p style={{ color: '#4a5568', fontWeight: 'bold', fontSize: '18px', marginTop: '8px', marginBottom: '32px' }}>Elecciones Generales 2026 - Primera vuelta</p>
+          {/* CAMBIO: Actualizado a Segunda vuelta */}
+          <p style={{ color: '#4a5568', fontWeight: 'bold', fontSize: '18px', marginTop: '8px', marginBottom: '32px' }}>Elecciones Generales 2026 - Segunda vuelta</p>
 
           {/* Input DNI */}
           <div style={{ marginBottom: '24px' }}>
@@ -64,15 +94,19 @@ function App() {
 
           <div style={{ borderTop: '1px solid #edf2f7', width: '100%', margin: '32px 0' }}></div>
           <p style={{ color: '#6b7280', fontStyle: 'italic', fontSize: '14px', lineHeight: '1.5', padding: '0 16px', fontWeight: '500' }}>
-            "Gracias por asumir el reto con responsabilidad como fiscalizadores de local de votación de estas elecciones electorales 2026"
+            "Gracias por asumir el reto con responsibility como fiscalizadores de local de votación de estas elecciones electorales 2026"
           </p>
         </div>
       </div>
 
-      {personaEncontrada && (
+      {/* Enviamos "datosCertificado" que ya incluye todas las variables nuevas calculadas */}
+      {personaEncontrada && datosCertificado && (
         <Certificado 
-          persona={personaEncontrada} 
-          alCerrar={() => setPersonaEncontrada(null)} 
+          persona={datosCertificado} 
+          alCerrar={() => {
+            setPersonaEncontrada(null);
+            setDatosCertificado(null);
+          }} 
         />
       )}
     </div>
