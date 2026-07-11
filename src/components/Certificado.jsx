@@ -105,12 +105,16 @@ const Certificado = ({ persona, alCerrar }) => {
       const anchoDisponible = finX - inicioX;
       let renglonY = 432; 
       // Aumentamos el alto de línea para dar más espacio vertical.
-      const altoLinea = 28; 
+     const altoLinea = 35; 
 
       const lineasTexto = [
         {
           justificar: true,
-          segmentos: [{ text: "Por su participación e identificación con el Jurado Nacional de Elecciones, por haber Prestado ", bold: false }]
+          segmentos: [{ text: "Por su participación e identificación con el Jurado Nacional de Elecciones, ", bold: false }]
+        },
+        {
+          justificar: true,
+          segmentos: [{ text: "por haber Prestado ", bold: false }]
         },
         {
           justificar: true,
@@ -118,6 +122,11 @@ const Certificado = ({ persona, alCerrar }) => {
           segmentos: [
             { text: "servicios de ", bold: false },
             { text: `FISCALIZADOR DE LOCAL DE VOTACIÓN-CONTINGENCIA `, bold: true },
+          ]
+        },
+        {
+          justificar: true,
+          segmentos: [
             { text: "del ", bold: false },
             { text: `${rangoFechasContrato}`, bold: true },
             { text: ", asignado al Jurado ", bold: false }
@@ -132,6 +141,11 @@ const Certificado = ({ persona, alCerrar }) => {
           segmentos: [
             { text: "el ", bold: false },
             { text: "Proceso de las Elecciones Generales 2026 – Segunda vuelta", bold: true },
+          ]
+        },
+        {
+          justificar: true,
+          segmentos: [
             { text: ", llevadas a cabo el 7 de Junio del ", bold: false }
           ]
         },
@@ -167,8 +181,8 @@ const Certificado = ({ persona, alCerrar }) => {
 
             const espacioSobrante = anchoDisponible - anchoNatural;
             const numeroDeHuecos = palabras.length - 1;
-            // Aumentamos el espacio extra por hueco para forzar una distribución más amplia.
-            const espacioExtraPorHueco = (espacioSobrante / numeroDeHuecos) * 1.5;
+            // Reducimos el espacio extra por hueco para forzar una distribución más natural.
+            const espacioExtraPorHueco = (espacioSobrante / numeroDeHuecos);
 
             palabras.forEach((p) => {
               ctx.font = p.bold ? "bold 18px Arial, Helvetica, sans-serif" : "18px Arial, Helvetica, sans-serif";
@@ -194,12 +208,12 @@ const Certificado = ({ persona, alCerrar }) => {
       });
 
       // Nota final de conveniencia
-      renglonY += 15; 
+      renglonY += 20; 
       ctx.font = "19px Arial, Helvetica, sans-serif";
       ctx.fillText("Se expide el presente documento para los fines que el interesado considere convenientes.", inicioX, renglonY);
 
       // Ubicación y Fecha de Expedición
-      renglonY += 30;
+      renglonY += 40;
       ctx.font = "bold 18px Arial, Helvetica, sans-serif";
       ctx.fillText("Lima, 13 de Julio de 2026", inicioX, renglonY);
 
