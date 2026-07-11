@@ -95,6 +95,14 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.font = "bold 40px Arial, Helvetica, sans-serif";
       ctx.fillText(persona?.nombre || "Nombres y Apellidos", width / 2, 385);
 
+      // --- LÓGICA DINÁMICA DE FECHAS SEGÚN EL CONTRATO ---
+      const tipoContrato = persona?.cargo || persona?.contrato || '';
+      let rangoFechasContrato = "01 al 08 de Julio"; // Por defecto FLV URBANO
+
+      if (tipoContrato.includes("CONTINGENCIA")) {
+        rangoFechasContrato = "05 al 08 de Julio";
+      }
+
       // --- CUERPO JUSTIFICADO ---
       const inicioX = 120;
       const finX = width - 120;
@@ -113,7 +121,7 @@ const Certificado = ({ persona, alCerrar }) => {
             { text: "servicios de ", bold: false },
             { text: `${persona?.cargo || 'FISCALIZADOR DE LOCAL DE VOTACIÓN'} `, bold: true },
             { text: "del ", bold: false },
-            { text: "10 al 13 de Abril", bold: true },
+            { text: `${rangoFechasContrato}`, bold: true },
             { text: ", asignado al Jurado ", bold: false }
           ]
         },
@@ -125,8 +133,8 @@ const Certificado = ({ persona, alCerrar }) => {
           justificar: true,
           segmentos: [
             { text: "el ", bold: false },
-            { text: "Proceso de las Elecciones Generales 2026 – Primera vuelta", bold: true },
-            { text: ", llevadas a cabo el 12 de Abril del ", bold: false }
+            { text: "Proceso de las Elecciones Generales 2026 – Segunda vuelta", bold: true },
+            { text: ", llevadas a cabo el 7 de Junio del ", bold: false }
           ]
         },
         {
@@ -163,11 +171,20 @@ const Certificado = ({ persona, alCerrar }) => {
             const numeroDeHuecos = palabras.length - 1;
             const espacioExtraPorHueco = espacioSobrante / numeroDeHuecos;
 
+            // Evitamos saltos drásticos si la última palabra tiene demasiada separación
+            const espacioLimite = 25; 
+            const usarEspaciadoNormal = (espacioExtraPorHueco > espacioLimite);
+
             palabras.forEach((p) => {
               ctx.font = p.bold ? "bold 18px Arial, Helvetica, sans-serif" : "18px Arial, Helvetica, sans-serif";
               const palTexto = p.text.trimEnd();
               ctx.fillText(palTexto, xCursor, renglonY);
-              xCursor += ctx.measureText(palTexto).width + espacioExtraPorHueco;
+              
+              if (usarEspaciadoNormal) {
+                xCursor += ctx.measureText(p.text).width;
+              } else {
+                xCursor += ctx.measureText(palTexto).width + espacioExtraPorHueco;
+              }
             });
           } else {
             ctx.font = linea.segmentos[0].bold ? "bold 18px Arial, Helvetica, sans-serif" : "18px Arial, Helvetica, sans-serif";
@@ -188,10 +205,11 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.font = "19px Arial, Helvetica, sans-serif";
       ctx.fillText("Se expide el presente documento para los fines que el interesado considere convenientes.", inicioX, renglonY);
 
-      // Ubicación y Fecha
+      // Ubicación y Fecha de Expedición Actualizada
+      // CAMBIO: Emitido el 13 de Julio del 2026
       renglonY += 30;
       ctx.font = "bold 18px Arial, Helvetica, sans-serif";
-      ctx.fillText("Lima, 15 de Mayo de 2026", inicioX, renglonY);
+      ctx.fillText("Lima, 13 de Julio de 2026", inicioX, renglonY);
 
       // --- ÁREA DE FIRMAS ---
       const centroFirmaX = width / 2;
