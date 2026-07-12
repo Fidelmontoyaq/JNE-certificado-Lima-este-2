@@ -80,7 +80,7 @@ const Certificado = ({ persona, alCerrar }) => {
       }
       ctx.restore();
 
-      // Textos principales del encabezado
+      // Textos principales del encabezado (Usando fuentes estándar del sistema)
       ctx.fillStyle = "#b01e23";
       ctx.textAlign = "center";
       ctx.font = "bold 32px Arial, Helvetica, sans-serif";
@@ -90,22 +90,25 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.font = "19px Arial, Helvetica, sans-serif";
       ctx.fillText("El Presidente del Jurado Electoral Especial de Lima Este 2, otorga la Constancia a:", width / 2, 320);
 
+      // Nombre del fiscalizador
       ctx.fillStyle = "#000000";
       ctx.font = "bold 40px Arial, Helvetica, sans-serif";
-      ctx.fillText("CENTENO MARCOS, JAIME JAMIET", width / 2, 385);
+      ctx.fillText(persona?.nombre || "Nombres y Apellidos", width / 2, 385);
 
       // --- LÓGICA DINÁMICA DE FECHAS SEGÚN EL CONTRATO ---
-      const rangoFechasContrato = "05 al 08 de Julio";
+      const tipoContrato = persona?.cargo || persona?.contrato || '';
+      let rangoFechasContrato = "01 al 08 de Julio"; // Por defecto FLV URBANO
 
-      // --- CUERPO REESCRITO PARA UN ESPACIADO AMPLIO Y ORDENADO ---
-      // El párrafo original se ha dividido en segmentos mucho más cortos para 
-      // distribuir el texto a través de varias líneas de manera natural.
+      if (tipoContrato.includes("CONTINGENCIA")) {
+        rangoFechasContrato = "05 al 08 de Julio";
+      }
+
+      // --- CUERPO JUSTIFICADO ---
       const inicioX = 120;
       const finX = width - 120;
       const anchoDisponible = finX - inicioX;
       let renglonY = 432; 
-      // Aumentamos el alto de línea para dar más espacio vertical.
-      const altoLinea = 28; 
+      const altoLinea = 23; 
 
       const lineasTexto = [
         {
@@ -114,13 +117,11 @@ const Certificado = ({ persona, alCerrar }) => {
         },
         {
           justificar: true,
-          // Segmentos de texto con espacios explícitos para asegurar la separación.
           segmentos: [
             { text: "servicios de ", bold: false },
-            { text: `FISCALIZADOR DE LOCAL DE VOTACIÓN-CONTINGENCIA `, bold: true },
+            { text: `${persona?.cargo || 'FISCALIZADOR DE LOCAL DE VOTACIÓN'} `, bold: true },
             { text: "del ", bold: false },
             { text: `${rangoFechasContrato}`, bold: true }
-            
           ]
         },
         {
@@ -167,16 +168,22 @@ const Certificado = ({ persona, alCerrar }) => {
 
             const espacioSobrante = anchoDisponible - anchoNatural;
             const numeroDeHuecos = palabras.length - 1;
-            // Aumentamos el espacio extra por hueco para forzar una distribución más amplia.
-            const espacioExtraPorHueco = (espacioSobrante / numeroDeHuecos) * 1.5;
+            const espacioExtraPorHueco = espacioSobrante / numeroDeHuecos;
+
+            // Evitamos saltos drásticos si la última palabra tiene demasiada separación
+            const espacioLimite = 25; 
+            const usarEspaciadoNormal = (espacioExtraPorHueco > espacioLimite);
 
             palabras.forEach((p) => {
               ctx.font = p.bold ? "bold 18px Arial, Helvetica, sans-serif" : "18px Arial, Helvetica, sans-serif";
               const palTexto = p.text.trimEnd();
               ctx.fillText(palTexto, xCursor, renglonY);
               
-              // Usamos una lógica de espaciado que siempre prefiere el espacio extra calculado.
-              xCursor += ctx.measureText(palTexto).width + espacioExtraPorHueco;
+              if (usarEspaciadoNormal) {
+                xCursor += ctx.measureText(p.text).width;
+              } else {
+                xCursor += ctx.measureText(palTexto).width + espacioExtraPorHueco;
+              }
             });
           } else {
             ctx.font = linea.segmentos[0].bold ? "bold 18px Arial, Helvetica, sans-serif" : "18px Arial, Helvetica, sans-serif";
@@ -189,7 +196,6 @@ const Certificado = ({ persona, alCerrar }) => {
             xCursor += ctx.measureText(seg.text).width;
           });
         }
-        // Incrementamos la posición Y para el siguiente renglón.
         renglonY += altoLinea;
       });
 
@@ -198,12 +204,13 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.font = "19px Arial, Helvetica, sans-serif";
       ctx.fillText("Se expide el presente documento para los fines que el interesado considere convenientes.", inicioX, renglonY);
 
-      // Ubicación y Fecha de Expedición
+      // Ubicación y Fecha de Expedición Actualizada
+      // CAMBIO: Emitido el 13 de Julio del 2026
       renglonY += 30;
       ctx.font = "bold 18px Arial, Helvetica, sans-serif";
       ctx.fillText("Lima, 13 de Julio de 2026", inicioX, renglonY);
 
-      // --- ÁREA DE FIRMAS CON AGREGADO DE FIRMA AZUL ---
+      // --- ÁREA DE FIRMAS ---
       const centroFirmaX = width / 2;
       const firmaY = 670; 
 
@@ -212,13 +219,6 @@ const Certificado = ({ persona, alCerrar }) => {
         const anchoFirma = firma.width * escalaFirma;
         ctx.drawImage(firma, centroFirmaX - (anchoFirma / 2), firmaY - 70, anchoFirma, 100);
       }
-      
-      // Agregado de firma azul (representada por ctx.save/ctx.restore y un garabato azul)
-      ctx.save();
-      ctx.fillStyle = '#1a73e8'; // Color azul de firma
-      ctx.font = '24px Arial, Helvetica, sans-serif'; // Fuente para garabato
-      ctx.fillText('// ', centroFirmaX - 40, firmaY - 40); // Garabato inicial
-      ctx.restore();
       
       ctx.strokeStyle = "#000000";
       ctx.lineWidth = 1;
