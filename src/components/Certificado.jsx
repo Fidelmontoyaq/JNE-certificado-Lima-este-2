@@ -206,7 +206,7 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.fillText("Se expide el presente documento para los fines que el interesado considere convenientes.", inicioX, renglonY);
 
       // Ubicación y Fecha de Expedición Actualizada
-      // CAMBIO: Emitido el 13 de Julio del 2026
+      // CAMBIO: Emitido el 10 de Julio del 2026
       renglonY += 30;
       ctx.font = "bold 18px Arial, Helvetica, sans-serif";
       ctx.fillText("Lima, 13 de Julio de 2026", inicioX, renglonY);
