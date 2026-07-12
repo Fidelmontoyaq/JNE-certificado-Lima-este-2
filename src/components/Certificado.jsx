@@ -119,13 +119,13 @@ const Certificado = ({ persona, alCerrar }) => {
             { text: "servicios de ", bold: false },
             { text: `FISCALIZADOR DE LOCAL DE VOTACIÓN-CONTINGENCIA `, bold: true },
             { text: "del ", bold: false },
-            { text: `${rangoFechasContrato}`, bold: true },
-            { text: ", asignado al Jurado ", bold: false }
+            { text: `${rangoFechasContrato}`, bold: true }
+            
           ]
         },
         {
           justificar: true,
-          segmentos: [{ text: "Electoral Especial de Lima Este 2, garantizando el respeto de la voluntad ciudadana, manifestada en ", bold: false }]
+          segmentos: [{ text: ", asignado al Jurado Electoral Especial de Lima Este 2, manifestada en ", bold: false }]
         },
         {
           justificar: true,
