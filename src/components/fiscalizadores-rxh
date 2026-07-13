@@ -1,12 +1,73 @@
-export const fiscalizadores = [
-  {
-    dni: "12345678",
-    nombre: "Juan Perez",
-    faltaRecibo: true // <--- Esta propiedad es la que lee el código de arriba
-  },
-  {
-    dni: "87654321",
-    nombre: "Maria Rojas",
-    faltaRecibo: false
-  }
-];
+import React from 'react';
+
+function FiscalizadoresRxh({ alCerrar }) {
+  return (
+    <div 
+      onClick={alCerrar} // Al hacer clic en el fondo oscuro, se cierra el aviso
+      style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100vw', 
+        height: '100vh', 
+        backgroundColor: 'rgba(0,0,0,0.5)', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justify: 'center', 
+        zIndex: 1000 
+      }}
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()} // Evita que el aviso se cierre si se hace clic dentro del recuadro blanco
+        style={{ 
+          backgroundColor: 'white', 
+          padding: '32px', 
+          borderRadius: '20px', 
+          maxWidth: '360px', 
+          width: '90%', 
+          textAlign: 'center', 
+          boxShadow: '0 10px 25px rgba(0,0,0,0.2)', 
+          borderTop: '8px solid #b01e23', // Mantenemos la línea roja institucional del JNE
+          fontFamily: 'sans-serif'
+        }}
+      >
+        {/* Icono de Alerta */}
+        <div style={{ fontSize: '48px', color: '#b01e23', marginBottom: '12px' }}>⚠️</div>
+        
+        <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1f2937', marginBottom: '12px' }}>
+          Aviso Importante
+        </h2>
+        
+        <p style={{ color: '#4b5563', fontSize: '15px', lineHeight: '1.6', marginBottom: '24px' }}>
+          Usted cuenta con un pendiente de entrega: <br />
+          <strong style={{ color: '#b01e23', display: 'block', marginTop: '8px', fontSize: '16px' }}>
+            Falta entregar Recibos por Honorarios.
+          </strong>
+        </p>
+        
+        {/* Botón para regresar a la consulta */}
+        <button 
+          onClick={alCerrar}
+          style={{ 
+            width: '100%', 
+            padding: '12px', 
+            backgroundColor: '#4b5563', 
+            color: 'white', 
+            fontWeight: 'bold', 
+            borderRadius: '8px', 
+            border: 'none', 
+            cursor: 'pointer', 
+            fontSize: '16px',
+            transition: 'background-color 0.2s'
+          }}
+          onMouseOver={(e) => e.target.style.backgroundColor = '#374151'}
+          onMouseOut={(e) => e.target.style.backgroundColor = '#4b5563'}
+        >
+          Regresar
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default FiscalizadoresRxh;
