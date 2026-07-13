@@ -169,7 +169,7 @@ const Certificado = ({ persona, alCerrar }) => {
             const numeroDeHuecos = palabras.length - 1;
             const espacioExtraPorHueco = espacioSobrante / numeroDeHuecos;
 
-            // BUG FIX: El espaciado normal solo debe usarse si el espacio extra es exagerado (ej. saltos forzados de última línea)
+            // El espaciado normal solo se usa si el espacio calculado es excesivamente amplio (ej. última línea corta)
             const espacioLimite = 60; 
             const usarEspaciadoNormal = (espacioExtraPorHueco > espacioLimite || espacioExtraPorHueco < 0);
 
@@ -179,7 +179,6 @@ const Certificado = ({ persona, alCerrar }) => {
               ctx.fillText(palTexto, xCursor, renglonY);
               
               if (usarEspaciadoNormal) {
-                // Sumamos el ancho de la palabra limpia más un espacio estándar
                 xCursor += ctx.measureText(palTexto).width + ctx.measureText(' ').width;
               } else {
                 xCursor += ctx.measureText(palTexto).width + espacioExtraPorHueco;
