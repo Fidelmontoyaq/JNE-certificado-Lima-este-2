@@ -1,44 +1,25 @@
 import { useState } from 'react'; 
 import Certificado from './components/Certificado.jsx';
-// Importamos tu nuevo componente desde la ruta solicitada
-import FiscalizadoresRxh from './components/fiscalizadores-rxh.jsx';
+
+// BUG FIX: Importamos el array de datos de fiscalizadores
+import { fiscalizadores } from './data/fiscalizadores.js'; 
 
 function App() {
   const [dni, setDni] = useState('');
   const [personaEncontrada, setPersonaEncontrada] = useState(null);
   const [error, setError] = useState('');
-  const [mostrarAvisoRecibo, setMostrarAvisoRecibo] = useState(false);
-
-  // ========================================================
-  // ESPACIO PARA COLOCAR LOS DNI QUE FALTAN ENTREGAR RECIBO
-  // ========================================================
-  const dnisFaltaRecibo = [
-    '12345678',
-    '87654321',
-    '44445555' // Simplemente ve agregando los números de DNI aquí entre comillas
-  ];
 
   const handleBuscar = () => {
     if (dni.length === 8) {
-      
-      // 1. Verificación directa si está en la lista de pendientes de RxH
-      if (dnisFaltaRecibo.includes(dni)) {
-        setMostrarAvisoRecibo(true);
-        setPersonaEncontrada(null); 
-        setError('');
-        return; // Rompe la función aquí para no cargar certificados
-      }
-
-      // 2. Si no debe recibo, procede con tu flujo normal de base de datos
+      // Flujo normal directo a la base de datos local
       const resultado = fiscalizadores.find(p => p.dni === dni);
+      
       if (resultado) {
         setPersonaEncontrada(resultado);
-        setMostrarAvisoRecibo(false);
         setError('');
       } else {
         setError('DNI no encontrado');
         setPersonaEncontrada(null);
-        setMostrarAvisoRecibo(false);
       }
     } else {
       setError('El DNI debe tener 8 dígitos');
@@ -92,11 +73,7 @@ function App() {
         </div>
       </div>
 
-      {/* Renderizado de la Ventana Emergente Externa */}
-      {mostrarAvisoRecibo && (
-        <FiscalizadoresRxh alCerrar={() => setMostrarAvisoRecibo(false)} />
-      )}
-
+      {/* Renderizado Condicional del Certificado */}
       {personaEncontrada && (
         <Certificado 
           persona={personaEncontrada} 
