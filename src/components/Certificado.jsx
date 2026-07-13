@@ -4,7 +4,7 @@ import { jsPDF } from 'jspdf';
 const Certificado = ({ persona, alCerrar }) => {
   const canvasRef = useRef(null);
 
-  // EFECTO DE DIBUJO (Se ejecuta instantáneamente cuando la persona cambia)
+  // EFECTO DE DIBUJO (Se ejecuta cuando la persona cambia)
   useEffect(() => {
     let activo = true;
 
@@ -152,7 +152,7 @@ const Certificado = ({ persona, alCerrar }) => {
             const listaPalabras = seg.text.split(' ');
             listaPalabras.forEach((pal, index) => {
               const textoPalabra = pal + (index < listaPalabras.length - 1 ? ' ' : '');
-              if (textoPalabra !== '') {
+              if (textoPalabra.trim() !== '') {
                 palabras.push({ text: textoPalabra, bold: seg.bold });
               }
             });
@@ -169,8 +169,9 @@ const Certificado = ({ persona, alCerrar }) => {
             const numeroDeHuecos = palabras.length - 1;
             const espacioExtraPorHueco = espacioSobrante / numeroDeHuecos;
 
-            const espacioLimite = 25; 
-            const usarEspaciadoNormal = (espacioExtraPorHueco > espacioLimite);
+            // BUG FIX: El espaciado normal solo debe usarse si el espacio extra es exagerado (ej. saltos forzados de última línea)
+            const espacioLimite = 60; 
+            const usarEspaciadoNormal = (espacioExtraPorHueco > espacioLimite || espacioExtraPorHueco < 0);
 
             palabras.forEach((p) => {
               ctx.font = p.bold ? "bold 18px Arial, Helvetica, sans-serif" : "18px Arial, Helvetica, sans-serif";
@@ -178,14 +179,15 @@ const Certificado = ({ persona, alCerrar }) => {
               ctx.fillText(palTexto, xCursor, renglonY);
               
               if (usarEspaciadoNormal) {
-                xCursor += ctx.measureText(p.text).width;
+                // Sumamos el ancho de la palabra limpia más un espacio estándar
+                xCursor += ctx.measureText(palTexto).width + ctx.measureText(' ').width;
               } else {
                 xCursor += ctx.measureText(palTexto).width + espacioExtraPorHueco;
               }
             });
-          } else {
-            ctx.font = linea.segmentos[0].bold ? "bold 18px Arial, Helvetica, sans-serif" : "18px Arial, Helvetica, sans-serif";
-            ctx.fillText(linea.segmentos[0].text, inicioX, renglonY);
+          } else if (palabras.length === 1) {
+            ctx.font = palabras[0].bold ? "bold 18px Arial, Helvetica, sans-serif" : "18px Arial, Helvetica, sans-serif";
+            ctx.fillText(palabras[0].text.trimEnd(), inicioX, renglonY);
           }
         } else {
           linea.segmentos.forEach(seg => {
