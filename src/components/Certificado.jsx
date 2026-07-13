@@ -97,10 +97,10 @@ const Certificado = ({ persona, alCerrar }) => {
 
       // --- LÓGICA DINÁMICA DE FECHAS SEGÚN EL CONTRATO ---
       const tipoContrato = persona?.cargo || persona?.contrato || '';
-      let rangoFechasContrato = "01 al 08 de Julio"; // Por defecto FLV URBANO
+      let rangoFechasContrato = "01 al 08 de Junio"; // Por defecto FLV URBANO
 
       if (tipoContrato.includes("CONTINGENCIA")) {
-        rangoFechasContrato = "05 al 08 de Julio";
+        rangoFechasContrato = "05 al 08 de Junio";
       }
 
       // --- CUERPO JUSTIFICADO ---
