@@ -127,14 +127,16 @@ const Certificado = ({ persona, alCerrar }) => {
         },
         {
           justificar: true,
-          segmentos: [{ text: "al Jurado Electoral Especial de Lima Este 2, manifestada en el", bold: false },
-                     { text: "Proceso de las Elecciones Generales", bold: true },]
+          segmentos: [
+            { text: "al Jurado Electoral Especial de Lima Este 2, manifestada en el", bold: false },
+            { text: "Proceso de las Elecciones Generales", bold: true }
+          ]
         },
         {
           justificar: false,
           segmentos: [
             { text: "2026 – Segunda vuelta", bold: true },
-            { text: ", llevadas a cabo el 7 de Junio del ", 2026. bold: false }
+            { text: ", llevadas a cabo el 7 de Junio del 2026.", bold: false } // <- CORREGIDO AQUÍ
           ]
         },
       ];
@@ -202,7 +204,6 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.fillText("Se expide el presente documento para los fines que el interesado considere convenientes.", inicioX, renglonY);
 
       // Ubicación y Fecha de Expedición Actualizada
-      // CAMBIO: Emitido el 10 de Julio del 2026
       renglonY += 30;
       ctx.font = "bold 18px Arial, Helvetica, sans-serif";
       ctx.fillText("Lima, 10 de Julio de 2026", inicioX, renglonY);
@@ -235,7 +236,7 @@ const Certificado = ({ persona, alCerrar }) => {
 
     dibujar();
     return () => { activo = false; };
-  }, [persona]); // Solo se ejecuta si cambian los datos de la persona
+  }, [persona]); 
 
   const descargar = () => {
     if (!canvasRef.current) return;
