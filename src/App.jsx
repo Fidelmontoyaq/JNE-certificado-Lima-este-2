@@ -1,5 +1,5 @@
 import { useState } from 'react'; 
-import { fiscalizadores } from './data/fiscalizadores.js';
+import FiscalizadoresRxh from './components/fiscalizadores-rxh.jsx';
 import Certificado from './components/Certificado.jsx';
 // Importamos tu nuevo componente desde la ruta solicitada
 import FiscalizadoresRxh from './components/fiscalizadores-rxh.jsx';
