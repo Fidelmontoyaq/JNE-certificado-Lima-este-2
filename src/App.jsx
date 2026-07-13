@@ -6,16 +6,27 @@ function App() {
   const [dni, setDni] = useState('');
   const [personaEncontrada, setPersonaEncontrada] = useState(null);
   const [error, setError] = useState('');
+  // Nuevo estado para controlar la ventana emergente de recibos
+  const [mostrarAvisoRecibo, setMostrarAvisoRecibo] = useState(false);
 
   const handleBuscar = () => {
     if (dni.length === 8) {
       const resultado = fiscalizadores.find(p => p.dni === dni);
       if (resultado) {
-        setPersonaEncontrada(resultado);
-        setError('');
+        // VALIDACIÓN: Verifica si falta entregar recibo (ajusta 'faltaRecibo' según tu JSON de data)
+        if (resultado.faltaRecibo === true) {
+          setMostrarAvisoRecibo(true);
+          setPersonaEncontrada(null); // Evita mostrar el certificado de fondo si debe recibos
+          setError('');
+        } else {
+          setPersonaEncontrada(resultado);
+          setMostrarAvisoRecibo(false);
+          setError('');
+        }
       } else {
         setError('DNI no encontrado');
         setPersonaEncontrada(null);
+        setMostrarAvisoRecibo(false);
       }
     } else {
       setError('El DNI debe tener 8 dígitos');
@@ -68,6 +79,36 @@ function App() {
           </p>
         </div>
       </div>
+
+      {/* --- VENTANA EMERGENTE (MODAL) DE AVISO DE RECIBOS --- */}
+      {mostrarAvisoRecibo && (
+        <div 
+          onClick={() => setMostrarAvisoRecibo(false)} // Si pincha afuera, se cierra
+          style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()} // Evita que se cierre al hacer clic dentro de la tarjeta
+            style={{ backgroundColor: 'white', padding: '32px', borderRadius: '20px', maxWidth: '360px', width: '90%', textAlign: 'center', boxShadow: '0 10px 25px rgba(0,0,0,0.2)', borderTop: '8px solid #dc2626' }}
+          >
+            {/* Icono de advertencia */}
+            <div style={{ fontSize: '48px', color: '#dc2626', marginBottom: '12px' }}>⚠️</div>
+            
+            <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#1f2937', marginBottom: '12px' }}>Aviso Importante</h2>
+            
+            <p style={{ color: '#4b5563', fontSize: '15px', lineHeight: '1.6', marginBottom: '24px' }}>
+              Usted cuenta con un pendiente: <br />
+              <strong style={{ color: '#dc2626' }}>Falta entregar Recibos por Honorarios.</strong>
+            </p>
+            
+            <button 
+              onClick={() => setMostrarAvisoRecibo(false)}
+              style={{ width: '100%', padding: '12px', backgroundColor: '#4b5563', color: 'white', fontWeight: 'bold', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '16px' }}
+            >
+              Regresar
+            </button>
+          </div>
+        </div>
+      )}
 
       {personaEncontrada && (
         <Certificado 
