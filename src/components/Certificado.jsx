@@ -127,20 +127,16 @@ const Certificado = ({ persona, alCerrar }) => {
         },
         {
           justificar: true,
-          segmentos: [{ text: "al Jurado Electoral Especial de Lima Este 2, garantizando el respeto de la voluntad ciudadana, manifestada en ", bold: false }]
-        },
-        {
-          justificar: true,
-          segmentos: [
-            { text: "el ", bold: false },
-            { text: "Proceso de las Elecciones Generales 2026 – Segunda vuelta", bold: true },
-            { text: ", llevadas a cabo el 7 de Junio del ", bold: false }
-          ]
+          segmentos: [{ text: "al Jurado Electoral Especial de Lima Este 2, manifestada en el", bold: false },
+                     { text: "Proceso de las Elecciones Generales", bold: true },]
         },
         {
           justificar: false,
-          segmentos: [{ text: "2026.", bold: false }]
-        }
+          segmentos: [
+            { text: "2026 – Segunda vuelta", bold: true },
+            { text: ", llevadas a cabo el 7 de Junio del ", 2026. bold: false }
+          ]
+        },
       ];
 
       ctx.textAlign = "left";
