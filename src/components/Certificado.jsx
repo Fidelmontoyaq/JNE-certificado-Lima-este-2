@@ -80,7 +80,7 @@ const Certificado = ({ persona, alCerrar }) => {
       }
       ctx.restore();
 
-      // Textos principales del encabezado (Usando fuentes estándar del sistema)
+      // Textos principales del encabezado
       ctx.fillStyle = "#b01e23";
       ctx.textAlign = "center";
       ctx.font = "bold 32px Arial, Helvetica, sans-serif";
@@ -97,7 +97,7 @@ const Certificado = ({ persona, alCerrar }) => {
 
       // --- LÓGICA DINÁMICA DE FECHAS SEGÚN EL CONTRATO ---
       const tipoContrato = persona?.cargo || persona?.contrato || '';
-      let rangoFechasContrato = "01 al 08 de Junio"; // Por defecto FLV URBANO
+      let rangoFechasContrato = "01 al 08 de Junio"; 
 
       if (tipoContrato.includes("CONTINGENCIA")) {
         rangoFechasContrato = "05 al 08 de Junio";
@@ -136,7 +136,7 @@ const Certificado = ({ persona, alCerrar }) => {
           justificar: false,
           segmentos: [
             { text: "2026 – Segunda vuelta", bold: true },
-            { text: ", llevadas a cabo el 7 de Junio del 2026.", bold: false } // <- CORREGIDO AQUÍ
+            { text: ", llevadas a cabo el 7 de Junio del 2026.", bold: false }
           ]
         },
       ];
@@ -169,7 +169,6 @@ const Certificado = ({ persona, alCerrar }) => {
             const numeroDeHuecos = palabras.length - 1;
             const espacioExtraPorHueco = espacioSobrante / numeroDeHuecos;
 
-            // Evitamos saltos drásticos si la última palabra tiene demasiada separación
             const espacioLimite = 25; 
             const usarEspaciadoNormal = (espacioExtraPorHueco > espacioLimite);
 
@@ -203,7 +202,7 @@ const Certificado = ({ persona, alCerrar }) => {
       ctx.font = "19px Arial, Helvetica, sans-serif";
       ctx.fillText("Se expide el presente documento para los fines que el interesado considere convenientes.", inicioX, renglonY);
 
-      // Ubicación y Fecha de Expedición Actualizada
+      // Ubicación y Fecha de Expedición
       renglonY += 30;
       ctx.font = "bold 18px Arial, Helvetica, sans-serif";
       ctx.fillText("Lima, 10 de Julio de 2026", inicioX, renglonY);
