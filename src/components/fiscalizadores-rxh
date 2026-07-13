@@ -1,0 +1,12 @@
+export const fiscalizadores = [
+  {
+    dni: "12345678",
+    nombre: "Juan Perez",
+    faltaRecibo: true // <--- Esta propiedad es la que lee el código de arriba
+  },
+  {
+    dni: "87654321",
+    nombre: "Maria Rojas",
+    faltaRecibo: false
+  }
+];
